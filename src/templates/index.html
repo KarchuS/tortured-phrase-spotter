@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tortured Phrase Spotter</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .highlight { color: red; font-weight: bold; background: #ffeaea; }
+        pre { background: #f8f9fa; padding: 1em; border-radius: 8px; }
+        .table td, .table th { vertical-align: middle; }
+    </style>
+</head>
+<body>
+<div class="container my-4">
+    <h2 class="mb-4">Text with Highlighted Phrases</h2>
+    <form method="post" enctype="multipart/form-data" class="mb-4">
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" name="textfile" accept=".txt,.pdf" required>
+            <button class="btn btn-primary" type="submit">Analyze</button>
+        </div>
+        <div class="form-text">Upload a .txt or .pdf file for analysis.</div>
+    </form>
+    {% if highlighted %}
+    <div class="mb-4">
+        <pre>{{ highlighted|safe }}</pre>
+    </div>
+    {% endif %}
+    {% if detected %}
+    <h4>Detected Phrases</h4>
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Phrase</th>
+                    <th>Count</th>
+                    <th>Replace With</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in detected %}
+                <tr>
+                    <td>{{ row.phrase }}</td>
+                    <td>{{ row.count }}</td>
+                    <td>{{ row.replace }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="mb-3">
+        <a href="{{ url_for('download_report', report_type='html') }}" class="btn btn-outline-secondary me-2">Download HTML Report</a>
+        <a href="{{ url_for('download_report', report_type='txt') }}" class="btn btn-outline-secondary">Download TXT Report</a>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html> 
